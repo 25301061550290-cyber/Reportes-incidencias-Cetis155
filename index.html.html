@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f4fd8">
+<meta name="format-detection" content="telephone=no">
+<title>Reportes de incidencias · CETis 155</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#f2f5f9;--surface:#fff;--ink:#14213d;--mute:#5b6678;--line:#d6dde8;--brand:#1f4fd8;--brand-ink:#fff;--p:#b45309;--pb:#fef3c7;--e:#1d4ed8;--eb:#dbeafe;--r:#047857;--rb:#d1fae5;--err:#b91c1c;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1524;--surface:#16203a;--ink:#e8edf7;--mute:#9aa7bd;--line:#2a3857;--brand:#6c93ff;--brand-ink:#0e1524;--p:#fbbf24;--pb:#3a2c0c;--e:#93b4ff;--eb:#18294f;--r:#4ade80;--rb:#0f3326;--err:#f87171;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1524;--surface:#16203a;--ink:#e8edf7;--mute:#9aa7bd;--line:#2a3857;--brand:#6c93ff;--brand-ink:#0e1524;--p:#fbbf24;--pb:#3a2c0c;--e:#93b4ff;--eb:#18294f;--r:#4ade80;--rb:#0f3326;--err:#f87171;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%;text-size-adjust:100%}
+*{box-sizing:border-box}
+body{margin:0;overflow-wrap:anywhere;-webkit-tap-highlight-color:transparent;background:var(--bg);color:var(--ink);font:16px/1.55 Figtree,system-ui,sans-serif}
+header{padding:28px 20px 8px;max-width:820px;margin:auto}
+h1{font:800 clamp(1.7rem,5vw,2.5rem)/1.05 'Bricolage Grotesque',Figtree,sans-serif;margin:0 0 6px;letter-spacing:-.02em}
+h2{font:600 1.25rem 'Bricolage Grotesque',Figtree,sans-serif;margin:0 0 12px}
+.sub{color:var(--mute);margin:0}
+nav{display:flex;gap:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none;max-width:820px;margin:16px auto 0;padding:0 20px;overflow-x:auto}
+nav::-webkit-scrollbar{display:none}
+nav a{min-height:44px;display:inline-flex;align-items:center;padding:9px 16px;border-radius:999px;border:1px solid var(--line);color:var(--ink);text-decoration:none;font-weight:600;white-space:nowrap;background:var(--surface)}
+nav a[aria-current=page]{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+main{max-width:820px;margin:18px auto 48px;padding:0 20px}
+section{display:none}section.on{display:block}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px}
+label{display:block;font-weight:600;margin:14px 0 5px}
+input,select,textarea{width:100%;min-height:44px;font-size:16px;font-family:inherit;line-height:inherit;-webkit-appearance:none;appearance:none;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:10px 12px}
+textarea{min-height:110px;resize:vertical}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+button{font:inherit;font-weight:600;border:0;border-radius:9px;padding:12px 20px;min-height:44px;touch-action:manipulation;-webkit-appearance:none;appearance:none;background:var(--brand);color:var(--brand-ink);cursor:pointer;margin-top:18px}
+button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);margin-top:0}
+.hint{font-size:.88rem;color:var(--mute);margin:4px 0 0}
+.err{color:var(--err);font-weight:600;margin:12px 0 0;min-height:1.2em}
+.ticket{margin-top:18px;border:2px dashed var(--brand);border-radius:14px;padding:20px;background:var(--surface);display:grid;gap:4px}
+.folio{font:800 clamp(1.8rem,7vw,2.6rem) 'Bricolage Grotesque',sans-serif;letter-spacing:.02em;color:var(--brand)}
+.pill{display:inline-block;padding:3px 12px;border-radius:999px;font-weight:600;font-size:.85rem}
+.pill.pendiente{background:var(--pb);color:var(--p)}.pill.proceso{background:var(--eb);color:var(--e)}.pill.resuelta{background:var(--rb);color:var(--r)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.stats button{margin:0;background:var(--surface);color:var(--ink);border:1px solid var(--line);padding:12px 6px;text-align:center;line-height:1.2}
+.stats button[aria-pressed=true]{border-color:var(--brand);box-shadow:inset 0 0 0 1px var(--brand)}
+.stats b{display:block;font:800 1.6rem 'Bricolage Grotesque',sans-serif}
+.item{border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-bottom:10px}
+.item summary::-webkit-details-marker{display:none}
+.item summary{min-height:48px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;padding:14px 16px;cursor:pointer;list-style:none}
+.item summary b{font-family:'Bricolage Grotesque',sans-serif}
+.item .body{padding:0 16px 16px;border-top:1px solid var(--line)}
+.item img,.ticket img{max-width:100%;max-height:260px;border-radius:10px;margin-top:10px;display:block}
+.hist{margin:10px 0 0;padding-left:18px;color:var(--mute);font-size:.92rem}
+.empty{color:var(--mute);text-align:center;padding:30px 10px}
+.row{display:flex;gap:10px;align-items:end;flex-wrap:wrap}.row>div{flex:1;min-width:150px}
+.toast{position:fixed;left:50%;width:max-content;max-width:calc(100% - 32px);text-align:center;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:9px;display:none;z-index:9}
+select{background-image:linear-gradient(45deg,transparent 50%,var(--mute) 50%),linear-gradient(135deg,var(--mute) 50%,transparent 50%);background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;background-size:6px 6px;background-repeat:no-repeat;padding-right:36px}
+input[type=file]{padding:8px}
+.admin-head{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center}
+.admin-head .acts{display:flex;flex-wrap:wrap;gap:8px}
+@media (max-width:520px){
+.stats{grid-template-columns:repeat(2,1fr)}
+header{padding:20px 16px 4px}
+nav{padding:0 16px}
+main{padding:0 12px;margin-top:14px}
+.card{padding:16px}
+.row>div{min-width:100%}
+.admin-head .acts,.admin-head .acts button{width:100%}
+.item summary{padding:12px}
+.item .body{padding:0 12px 14px}
+.ticket{padding:16px}
+}
+@media (prefers-reduced-motion:no-preference){.ticket{animation:pop .35s ease-out}@keyframes pop{from{transform:scale(.97);opacity:0}}}
+</style>
+</head>
+<body>
+<header>
+<h1>Reportes de incidencias</h1>
+<p class="sub">CETis 155 · Informa un problema en las instalaciones y da seguimiento con tu folio.</p>
+</header>
+<nav aria-label="Secciones">
+<a href="#reportar" data-v="reportar">Reportar</a>
+<a href="#consultar" data-v="consultar">Consultar folio</a>
+<a href="#panel" data-v="panel">Personal autorizado</a>
+</nav>
+<main>
+
+<section id="reportar"><div class="card">
+<h2>Nuevo reporte</h2>
+<div id="formWrap">
+<label for="nombre">Nombre completo</label><input id="nombre" autocomplete="name" maxlength="80">
+<label for="mat">Matrícula o número de control</label><input id="mat" maxlength="20" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false">
+<p class="hint">La necesitarás junto con tu folio para consultar el estado.</p>
+<label for="area">Área afectada</label>
+<select id="area"><option value="">Selecciona un área</option></select>
+<label for="desc">Describe el problema</label><textarea id="desc" maxlength="600" placeholder="Qué ocurrió, dónde y desde cuándo."></textarea>
+<label for="foto">Fotografía como evidencia (opcional)</label><input id="foto" type="file" accept="image/*">
+<p class="err" id="err1" role="alert"></p>
+<button id="enviar">Enviar reporte</button>
+</div>
+<div id="done" hidden></div>
+</div></section>
+
+<section id="consultar"><div class="card">
+<h2>Consultar estado</h2>
+<div class="row">
+<div><label for="cf">Folio</label><input id="cf" placeholder="INC-2026-0001" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false"></div>
+<div><label for="cm">Matrícula</label><input id="cm" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false"></div>
+</div>
+<p class="err" id="err2" role="alert"></p>
+<button id="buscar">Consultar</button>
+<div id="res"></div>
+</div></section>
+
+<section id="panel"><div class="card">
+<div id="login">
+<h2>Acceso del personal</h2>
+<label for="user">Usuario</label><input id="user" autocomplete="username">
+<label for="pin">Contraseña</label><input id="pin" type="password" autocomplete="current-password">
+<p class="err" id="err3" role="alert"></p>
+<button id="entrar">Entrar</button>
+</div>
+<div id="admin" hidden>
+<div class="admin-head"><h2 style="margin:0">Panel de reportes</h2><span class="acts"><button class="ghost" id="resp">Descargar respaldo</button><button class="ghost" id="salir">Cerrar sesión</button></span></div>
+<div class="stats" id="stats" style="margin-top:14px"></div>
+<div id="lista"></div>
+</div>
+</div></section>
+</main>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ====== BACKEND en la nube (Google Apps Script + Hoja de cálculo de Google) ======
+   Pega aquí la URL de tu aplicación web de Apps Script (termina en /exec). */
+var API_URL='https://script.google.com/macros/s/AKfycbwmCo5qV6Z9oFsr6ha5q7hxwP6j5OtgnyYZWm1BJ9biyFW1XT_z4WW5F_vu_UJ75mtGUw/exec';
+var Backend=(function(){
+var AREAS=['Laboratorio 1','Laboratorio 2','Laboratorio 3','Laboratorio de Administración de Empresas','Laboratorio de Biblioteca'];
+function E(s,m){var e=new Error(m);e.status=s;return e}
+async function handle(method,path,body,token){
+if(method==='GET'&&path==='/areas')return AREAS.slice();
+if(API_URL.indexOf('https://')!==0)throw E(500,'Falta configurar API_URL con la URL de Apps Script.');
+var r;
+var ctl=window.AbortController?new AbortController():null,tm=setTimeout(function(){if(ctl)ctl.abort()},40000);
+try{var res=await fetch(API_URL,{method:'POST',body:JSON.stringify({method:method,path:path,body:body||{},token:token||''}),signal:ctl?ctl.signal:undefined});r=await res.json()}
+catch(e){throw E(0,'No se pudo conectar con la nube. Revisa tu internet e inténtalo de nuevo.')}
+finally{clearTimeout(tm)}
+if(!r.ok)throw E(r.status,r.msg);
+return r.data}
+return {handle:handle,volatile:function(){return false}}
+})();
+
+/* ====== FRONTEND ====== */
+var ST={pendiente:'Pendiente',proceso:'En proceso',resuelta:'Resuelta'};
+var token='',auth=false,filtro='todos',cache=[];
+function $(i){return document.getElementById(i)}
+function toast(t){var x=$('toast');x.textContent=t;x.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(function(){x.style.display='none'},3500)}
+function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function fecha(iso){var d=new Date(iso);try{return d.toLocaleString('es-MX',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}catch(e){return d.toString()}}
+function pill(e){return '<span class="pill '+e+'">'+ST[e]+'</span>'}
+
+/* Cliente de la API (llama al backend integrado) */
+var avisado=false;
+async function api(path,opt){opt=opt||{};
+try{var r=await Backend.handle(opt.method||'GET',path,opt.body,token);
+if(Backend.volatile()&&!avisado){avisado=true;toast('Este navegador no permite guardar datos: los reportes se perderán al cerrar la página.')}
+return r}catch(e){if(e.status===401&&token)cerrar();throw e}}
+
+/* Navegación por hash */
+function route(){var v=(location.hash||'#reportar').slice(1);if(!$(v))v='reportar';
+document.querySelectorAll('section').forEach(function(s){s.classList.toggle('on',s.id===v)});
+document.querySelectorAll('nav a').forEach(function(a){if(a.dataset.v===v)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
+window.scrollTo(0,0);
+if(v==='panel'&&auth)cargarAdmin()}
+window.addEventListener('hashchange',route);
+
+/* Formulario */
+api('/areas').then(function(list){list.forEach(function(a){var o=document.createElement('option');o.value=a;o.textContent=a;$('area').appendChild(o)})})
+.catch(function(e){toast(e.message)});
+function comprimir(file,cb){var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){
+var m=800,k=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
+c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',.6))};im.onerror=function(){toast('No se pudo leer la foto; se enviará el reporte sin ella.');cb('')};im.src=r.result};r.onerror=function(){cb('')};r.readAsDataURL(file)}
+$('enviar').onclick=function(){
+var n=$('nombre').value.trim(),m=$('mat').value.trim(),a=$('area').value,d=$('desc').value.trim(),f=$('foto').files[0];
+if(n.length<3)return $('err1').textContent='Escribe tu nombre completo.';
+if(m.length<4)return $('err1').textContent='La matrícula debe tener al menos 4 caracteres.';
+if(!a)return $('err1').textContent='Selecciona el área afectada.';
+if(d.length<10)return $('err1').textContent='Describe el problema con al menos 10 caracteres.';
+if(f&&!/^image\//.test(f.type))return $('err1').textContent='El archivo debe ser una imagen.';
+$('err1').textContent='';$('enviar').disabled=true;$('enviar').textContent='Enviando…';
+var fin=function(img){
+api('/reportes',{method:'POST',body:{nombre:n,matricula:m,area:a,descripcion:d,foto:img}})
+.then(mostrarFolio).catch(function(e){$('err1').textContent=e.message})
+.then(function(){$('enviar').disabled=false;$('enviar').textContent='Enviar reporte'})};
+if(f)comprimir(f,fin);else fin('')};
+function mostrarFolio(r){$('formWrap').hidden=true;var d=$('done');d.hidden=false;
+d.innerHTML='<h2>Reporte enviado</h2><div class="ticket"><span>Tu folio</span><span class="folio">'+esc(r.folio)+'</span><span>'+esc(r.area)+' · '+fecha(r.fecha)+'</span><span>'+pill(r.estado)+'</span></div>'
++'<p class="hint">Guarda tu folio. Para consultar el estado necesitas el folio y tu matrícula.</p><button id="otro">Hacer otro reporte</button>';
+$('otro').onclick=function(){['nombre','mat','desc','foto'].forEach(function(i){$(i).value=''});$('area').value='';d.hidden=true;$('formWrap').hidden=false}}
+
+/* Consulta */
+$('buscar').onclick=function(){
+var f=$('cf').value.trim().toUpperCase(),m=$('cm').value.trim(),out=$('res');out.innerHTML='';
+if(!f||!m)return $('err2').textContent='Escribe el folio y la matrícula.';
+$('err2').textContent='';
+api('/consulta',{method:'POST',body:{folio:f,matricula:m}}).then(function(r){
+out.innerHTML='<div class="ticket"><span class="folio">'+esc(r.folio)+'</span><span>'+esc(r.area)+'</span><span>'+pill(r.estado)+'</span><span>'+esc(r.desc)+'</span>'+(r.foto?'<img alt="Evidencia del reporte" src="'+r.foto+'">':'')
++'<ul class="hist">'+r.hist.map(function(h){return '<li>'+ST[h.e]+' · '+fecha(h.f)+'</li>'}).join('')+'</ul></div>'})
+.catch(function(e){$('err2').textContent=e.message})};
+
+/* Panel administrativo */
+function cerrar(){token='';auth=false;cache=[];$('admin').hidden=true;$('login').hidden=false}
+$('entrar').onclick=function(){
+var u=$('user').value.trim(),p=$('pin').value;
+if(!u||!p)return $('err3').textContent='Escribe usuario y clave.';
+api('/login',{method:'POST',body:{usuario:u,clave:p}}).then(function(r){
+token=r.token;auth=true;$('pin').value='';$('err3').textContent='';$('login').hidden=true;$('admin').hidden=false;cargarAdmin()})
+.catch(function(e){$('err3').textContent=e.message})};
+$('salir').onclick=cerrar;
+$('pin').onkeydown=function(e){if(e.key==='Enter')$('entrar').click()};
+$('cm').onkeydown=function(e){if(e.key==='Enter')$('buscar').click()};
+$('resp').onclick=function(){api('/admin/respaldo').then(function(d){var bl=new Blob([JSON.stringify(d,null,1)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download='respaldo-incidencias-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)}).catch(function(e){toast(e.message)})};
+function cargarAdmin(){api('/admin/reportes').then(function(l){cache=l;renderAdmin()}).catch(function(e){toast(e.message)})}
+function renderAdmin(){
+var c={todos:cache.length,pendiente:0,proceso:0,resuelta:0};cache.forEach(function(r){c[r.estado]++});
+$('stats').innerHTML=['todos','pendiente','proceso','resuelta'].map(function(k){return '<button data-f="'+k+'" aria-pressed="'+(filtro===k)+'"><b>'+c[k]+'</b>'+(k==='todos'?'Todos':ST[k])+'</button>'}).join('');
+$('stats').querySelectorAll('button').forEach(function(b){b.onclick=function(){filtro=b.dataset.f;renderAdmin()}});
+var l=cache.filter(function(r){return filtro==='todos'||r.estado===filtro});
+$('lista').innerHTML=l.length?l.map(function(r){return '<details class="item"><summary><b>'+esc(r.folio)+'</b>'+pill(r.estado)+'<span>'+esc(r.area)+'</span></summary><div class="body">'
++'<p><b>'+esc(r.nombre)+'</b> ('+esc(r.mat)+') · '+fecha(r.fecha)+'</p><p>'+esc(r.desc)+'</p>'+(r.hasFoto?'<button class="ghost vf" data-folio="'+r.folio+'">Ver fotografía</button><div></div>':'<p class="hint">Sin fotografía.</p>')
++'<label for="s-'+r.folio+'">Actualizar estado</label><select id="s-'+r.folio+'" data-folio="'+r.folio+'">'+Object.keys(ST).map(function(k){return '<option value="'+k+'"'+(k===r.estado?' selected':'')+'>'+ST[k]+'</option>'}).join('')+'</select></div></details>'}).join(''):'<p class="empty">No hay reportes en este estado.</p>';
+$('lista').querySelectorAll('.vf').forEach(function(b){b.onclick=function(){b.disabled=true;
+api('/admin/foto/'+encodeURIComponent(b.dataset.folio)).then(function(r){b.nextElementSibling.innerHTML=r.foto?'<img alt="Evidencia" src="'+r.foto+'">':'<p class="hint">No se pudo cargar la fotografía.</p>';b.hidden=true})
+.catch(function(e){b.disabled=false;toast(e.message)})}});
+$('lista').querySelectorAll('select').forEach(function(s){s.onchange=function(){
+api('/admin/reportes/'+encodeURIComponent(s.dataset.folio),{method:'PATCH',body:{estado:s.value}}).then(function(n){
+var i=cache.findIndex(function(x){return x.folio===n.folio});if(i>-1)cache[i]=n;
+toast(n.folio+' ahora está '+ST[n.estado].toLowerCase()+'.');renderAdmin();var e=$('s-'+n.folio);if(e)e.closest('details').open=true})
+.catch(function(e){toast(e.message);cargarAdmin()})}})}
+
+route();
+</script>
+</body>
+</html>
