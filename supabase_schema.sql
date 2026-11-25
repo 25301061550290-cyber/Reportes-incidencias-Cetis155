@@ -1,8 +1,5 @@
 -- ==========================================================================
 --  Reportes de incidencias CETis 155 · Esquema de Supabase (PostgreSQL)
---  Pégalo COMPLETO en Supabase > SQL Editor > New query > Run.
---  Idea de seguridad: nadie toca las tablas directamente. El público solo usa
---  funciones (RPC) con reglas; el personal entra con Supabase Auth y RLS.
 -- ==========================================================================
 
 create table public.areas(nombre text primary key, grupo text not null, orden int not null, activa boolean not null default true);  -- activa=false oculta un área del formulario sin romper reportes viejos
